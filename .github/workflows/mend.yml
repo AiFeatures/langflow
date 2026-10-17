@@ -16,7 +16,6 @@ env:
 
 jobs:
   mend-scan:
-    if: github.repository_owner == 'langflow-ai'
     runs-on: ubuntu-latest
     permissions:
       contents: read

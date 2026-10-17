@@ -36,7 +36,6 @@ env:
 
 jobs:
   resolve-ref:
-    if: github.repository_owner == 'langflow-ai'
     name: Resolve ref to scan
     runs-on: ubuntu-latest
     outputs:
@@ -76,7 +75,6 @@ jobs:
           echo "Scanning ref: $REF"
 
   a11y-scan:
-    if: github.repository_owner == 'langflow-ai'
     name: Playwright scan runner (shard ${{ matrix.shardIndex }})
     needs: resolve-ref
     runs-on: ubuntu-latest
@@ -184,7 +182,7 @@ jobs:
   a11y-report:
     name: Build IBM scan summary
     needs: [resolve-ref, a11y-scan]
-    if: ${{ github.repository_owner == 'langflow-ai' && (!cancelled()) }}
+    if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -243,7 +241,7 @@ jobs:
   python-route-scan:
     name: Python route scan (real backend, nightly)
     needs: resolve-ref
-    if: ${{ github.repository_owner == 'langflow-ai' && (github.event_name != 'pull_request') }}
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
@@ -330,7 +328,6 @@ jobs:
   # Playwright suite resolves via the accessibility-checker npm dependency. This
   # guard fails the workflow if the two pins drift apart again.
   engine-pin-check:
-    if: github.repository_owner == 'langflow-ai'
     name: Engine pin sync check
     needs: resolve-ref
     # Advisory for now: a drift failure annotates the run but never turns the
