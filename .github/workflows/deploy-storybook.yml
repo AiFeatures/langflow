@@ -13,6 +13,7 @@ on:
 
 jobs:
   deploy:
+    if: github.repository_owner == 'langflow-ai'
     name: Deploy Storybook
     runs-on: ubuntu-latest
     permissions:
